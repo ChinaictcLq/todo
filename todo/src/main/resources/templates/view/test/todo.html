@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>todo</title>
+    <head th:include="include :: header"></head>
+    <style type="text/css">
+        .completed{text-decoration:line-through;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input v-model="newTodo" @keyup.enter="onAddTodoKeyupEnter">
+        <ul>
+            <li v-for="todo in todos"
+                :key="todo.id"
+                :class="{ completed: todo.completed }">
+                <div>
+                    <input class="toggle" type="checkbox" v-model="todo.completed">
+                    <label>{{ todo.content }}</label>
+                    <button class="destroy" @click="removeTodo(todo)">删除</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                todos: [],
+                newTodo: '',
+                editedTodo: null,
+                visibility: 'all'
+            },
+            mounted: function(){},
+            methods:{
+                onAddTodoKeyupEnter: function () {
+                    var self = this;
+                    this.todos.push({
+                        id: _.now(),
+                        content: self.newTodo,
+                        completed: false
+                    })
+                    this.newTodo = ''
+                },
+                removeTodo: function(todo){
+                    var self = this
+                    self.todos.splice(self.todos.indexOf(todo), 1)
+                }
+            }
+        })
+    </script>
+</body>
+</html>
